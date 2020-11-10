@@ -4,7 +4,13 @@ const questionContainer = document.querySelector("#question-container");
 const questionText = document.querySelector("#question-text");
 const answersDiv = document.querySelector("#answers");
 const timerEl = document.querySelector("#timer");
+const finalResult = document.querySelector(".finalresult");
+const userScore = document.querySelector("#userscore");
+const scoreSubmit = document.querySelector("#submit");
+var userInit = document.querySelector("#userInit");
 var timeLeft = 100;
+var score = 0;
+let timerOn = true;
 
 const questions = [
     {
@@ -53,16 +59,22 @@ const questions = [
         correctIndex: 0,
     },
     {
-        text: "question?",
-        answers: ["answer 1", "answer 2", "answer 2"],
+        text: "bing bong",
+        answers: ["yoohoo", "woohoo", "answer 2"],
         correctIndex: 0,
     }
 ];
 let questionIndex = 0;
 
-startBtn.addEventListener("click", handleStartClick);
+if(startBtn){
+    startBtn.addEventListener("click", handleStartClick);
+}
+if(answersDiv){
 answersDiv.addEventListener("click", handleAnswerClick);
-
+}
+if(scoreSubmit){
+scoreSubmit.addEventListener("click", subUserScore);
+}
 
 function handleStartClick(e) {
 
@@ -91,7 +103,15 @@ function handleAnswerClick(e) {
     }
 
     questionIndex++;
-    renderQuestion();
+
+    if (questionIndex == questions.length) {
+        quizOver();
+
+    } else {
+        renderQuestion();
+    }
+
+
 };
 function renderQuestion() {
     const currentQuestion = questions[questionIndex];
@@ -119,15 +139,52 @@ function healthStart() {
     var timeInterval = setInterval(function () {
 
         timerEl.textContent = "Health: " + timeLeft;
+        if (timerOn){
         timeLeft--;
-
-        if (timeLeft < 0 || !renderQuestion) {
-            timeLeft = parseInt(timeLeft);
-            localStorage.setItem('score', timeLeft);
-            timerEl.textContent = "";
-
+        }
+        if (timeLeft <= 0 || !timerOn) {
             clearInterval(timeInterval);
         }
-
     }, 1000);
+}
+
+function quizOver() {
+    timerOn = false;
+    questionContainer.style.display = "none";
+    timerEl.style.display = "none";
+    finalResult.style.display = "block";
+    score = timeLeft;
+    userScore.textContent = `${score}`;
+}
+
+function subUserScore(e) {
+    e.preventDefault();
+    var userInitials = userInit.value.trim();
+    if (userInitials === "") {
+        return;
+    }
+    localStorage.setItem("User", userInitials);
+
+    const highScore = JSON.stringify(score);
+
+    localStorage.setItem("finalscore", highScore);
+    console.log(highScore);
+    console.log(userInitials);
+   
+    renderScoreBoard();
+}
+
+function renderScoreBoard(){
+    window.location.replace("score.html")
+    let storedUser = localStorage.getItem("User");
+    let storedScore = localStorage.getItem("finalscore");
+
+    if (storedUser) {
+        userInitFinal = JSON.parse(storedUser);
+    }
+    if (storedScore) {
+        userScoreFinal = JSON.parse(storedScore);
+    }
+    console.log(userScoreFinal);
+    console.log(userInitFinal);
 }

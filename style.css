@@ -11,3 +11,8 @@
 .question-container {
     display: none;
 }
+.finalresult {
+    display: none;
+    width: 50%;
+    
+}
