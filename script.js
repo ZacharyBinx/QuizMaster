@@ -3,6 +3,8 @@ const startPrompt = document.querySelector("#start-prompt");
 const questionContainer = document.querySelector("#question-container");
 const questionText = document.querySelector("#question-text");
 const answersDiv = document.querySelector("#answers");
+const timerEl = document.querySelector("#timer");
+var timeLeft = 100;
 
 const questions = [
     {
@@ -68,6 +70,8 @@ function handleStartClick(e) {
 
     questionContainer.style.display = "block";
 
+    healthStart();
+
     renderQuestion();
 };
 function handleAnswerClick(e) {
@@ -83,7 +87,7 @@ function handleAnswerClick(e) {
     if (userAnswer === correctAnswer) {
 
     } else {
-
+        timeLeft -= 10;
     }
 
     questionIndex++;
@@ -106,4 +110,24 @@ function renderQuestion() {
         btn.textContent = answer;
         answersDiv.appendChild(btn);
     }
+}
+
+function healthStart() {
+
+    timerEl.style.display = "block";
+
+    var timeInterval = setInterval(function () {
+
+        timerEl.textContent = "Health: " + timeLeft;
+        timeLeft--;
+
+        if (timeLeft < 0 || !renderQuestion) {
+            timeLeft = parseInt(timeLeft);
+            localStorage.setItem('score', timeLeft);
+            timerEl.textContent = "";
+
+            clearInterval(timeInterval);
+        }
+
+    }, 1000);
 }
