@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap');
+
+body, html {
+    height: 100%;
+}
+
+#timer {
+    display: none;
+    position: fixed;
+    top: 10px;
+    right: 20px;
+}
+.bg {
+    background-image: url("https://images.pexels.com/photos/5435551/pexels-photo-5435551.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=1920&w=1280");
+    font-family: 'Syne Mono';
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: darkgray;
+}
+.all-text {
+ background-color: rgb(29, 31, 31);
+ opacity: 85%;
+ color: rgb(209, 43, 43);
+ font-weight: bolder;  
+}
+.table-bg, th, td{
+    background-color: rgb(29, 31, 31);
+    color: rgb(209, 43, 43);
+    font-weight: bolder;
+    border-style: solid;
+    border-collapse: collapse;
+    border-color: rgb(114, 119, 119);
+    table-layout: fixed;
+}
+.td{
+    width: 50%;
+
+}
+.btn-text{
+    background-color: rgb(43, 46, 46);
+    opacity: 1;
+    color: rgb(223, 34, 34);
+    font-weight: bolder; 
+}
+.timer-text{
+    /* background-color: rgb(79, 85, 85); */
+    opacity: 1;
+    color: rgb(17, 172, 12);
+    font-size: 22px;
+    font-weight: bolder; 
+
+}
+.question-container {
+    display: none;
+}
+.finalresult {
+    display: none;
+    width: 50%;
+    
+}
