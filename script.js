@@ -34,7 +34,7 @@ const questions = [
         correctIndex: 1,
     },
     {
-        text: "You were able to choose 1 of 2 characters in Resident Evil. What were their names?",
+        text: "You were able to choose 1 of 2 characters in Resident Evil 1. What were their names?",
         answers: ["Rebecca Chambers and Billy Coen", "Leon Kennedy and Jill Valentine", "Jill Valentine and Chris Redfield"],
         correctIndex: 2,
     },
@@ -49,19 +49,19 @@ const questions = [
         correctIndex: 2,
     },
     {
-        text: "question?",
-        answers: ["answer 1", "answer 2", "answer 2"],
+        text: "What was the name of the virus in Resident Evil 4?",
+        answers: ["Las Plagas", "Del Lago", "El Salvador"],
         correctIndex: 0,
     },
     {
-        text: "question?",
-        answers: ["answer 1", "answer 2", "answer 2"],
-        correctIndex: 0,
+        text: "What is the name of Chris Redfield's companion in Resident Evil 5?",
+        answers: ["Jill Valentine", "Sheva Alomar", "Barry Burton"],
+        correctIndex: 1,
     },
     {
-        text: "bing bong",
-        answers: ["yoohoo", "woohoo", "answer 2"],
-        correctIndex: 0,
+        text: "In Resident Evil 2, if you were to check Albert Wesker's desk in the police department 50 times, what picture would you find on the film?",
+        answers: ["Albert's child from another woman", "Rebecca Chambers in a basketball uniform", "Picture of Jill Valentine in her home, through a window"],
+        correctIndex: 1,
     }
 ];
 let questionIndex = 0;
@@ -156,52 +156,57 @@ function quizOver() {
     score = timeLeft;
     userScore.textContent = `${score}`;
 }
-
+// submit button
 function subUserScore(e) {
     e.preventDefault();
-    var userInitials = userInit.value.trim();
-    if (userInitials === "") {
-        return;
-    }
-    localStorage.setItem("User", userInitials);
 
-    const highScore = JSON.stringify(score);
+    // const userInit = userInit.value.trim();
+    let user = {
+        inits: userInit.value.trim(),
+        initsScore: score,
+    };
+    let players = JSON.parse(localStorage.getItem('myPlayers')) || [];
 
-    localStorage.setItem("finalscore", highScore);
+    players.push(user);
 
+    localStorage.setItem('myPlayers', JSON.stringify(players));
+
+    
     window.location.replace("score.html")
     renderScoreBoard();
 }
 
-function renderScoreBoard() {
-    let storedUser = window.localStorage.getItem("User");
-    let storedScore = localStorage.getItem("finalscore");
+// loaded on score pageload
+function renderScoreBoard(e) {
+    let players = JSON.parse(localStorage.getItem('myPlayers')) || [];
+    // players.push({
 
-    if (storedUser) {
-        userInitFinal = JSON.parse(storedUser);
-    }
-    if (storedScore) {
-        userScoreFinal = JSON.parse(storedScore);
-    }
+    // })
+    // console.log(players);
 
-    console.log(userInitFinal);
-    console.log(userScoreFinal);
+    if (players) {
 
-    highScores.sort(function (a, b) {
-        return b.userscore - a.userscore;
-    });
+        // players.sort(function (a, b) {
+        //     return b.userscore - a.userscore;
+        // });
 
-    for (let i = 0; i < highScores.length; i++) {
+        for (let i = 0; i < players.length; i++) {
 
-        var row = document.createElement("tr");
-        for (let i = 0; i < highScores.length; i++) {
+            var row = document.createElement("tr");
             const table = document.querySelector("#leaderboard");
-            var cell = document.createElement("td");
-            var userText = document.createTextNode(userInitFinal, userScoreFinal);
-            cell.appendChild(userText);
-            row.appendChild(cell);
+            var initials = document.createElement("td");
+            var finalScore = document.createElement("td");
+
+            initials.textContent = players[i].inits;
+            finalScore.textContent = players[i].initsScore;
+
+            console.log(initials.textContent);
+            console.log(finalScore.textContent);
+            row.appendChild(initials);
+            row.appendChild(finalScore);
             table.appendChild(row);
         }
-    }
-
+    } else {
+    players = [];
+}
 }
