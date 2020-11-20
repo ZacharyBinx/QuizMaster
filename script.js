@@ -104,7 +104,7 @@ function handleAnswerClick(e) {
 
     questionIndex++;
 
-    if (questionIndex == questions.length) {
+    if (questionIndex == questions.length || timeLeft <= 0) {
         quizOver();
 
     } else {
@@ -139,11 +139,13 @@ function healthStart() {
     var timeInterval = setInterval(function () {
 
         timerEl.textContent = "Health: " + timeLeft;
+        if (timeLeft == 0 || !timerOn) {
+            timerOn = false;
+            quizOver();
+            clearInterval(timeInterval);
+        }
         if (timerOn) {
             timeLeft--;
-        }
-        if (timeLeft <= 0 || !timerOn) {
-            clearInterval(timeInterval);
         }
     }, 1000);
 }
@@ -153,7 +155,7 @@ function quizOver() {
     questionContainer.style.display = "none";
     timerEl.style.display = "none";
     finalResult.style.display = "block";
-    score = timeLeft;
+    score = timeLeft < 0?0:timeLeft;
     userScore.textContent = `${score}`;
 }
 // submit button
@@ -171,7 +173,7 @@ function subUserScore(e) {
 
     localStorage.setItem('myPlayers', JSON.stringify(players));
 
-    
+
     window.location.replace("score.html")
     renderScoreBoard();
 }
@@ -179,16 +181,12 @@ function subUserScore(e) {
 // loaded on score pageload
 function renderScoreBoard(e) {
     let players = JSON.parse(localStorage.getItem('myPlayers')) || [];
-    // players.push({
-
-    // })
-    // console.log(players);
 
     if (players) {
 
-        // players.sort(function (a, b) {
-        //     return b.userscore - a.userscore;
-        // });
+        players = players.sort(function (a, b) {
+            return b.initsScore - a.initsScore;
+        });
 
         for (let i = 0; i < players.length; i++) {
 
@@ -207,6 +205,6 @@ function renderScoreBoard(e) {
             table.appendChild(row);
         }
     } else {
-    players = [];
-}
+        players = [];
+    }
 }
